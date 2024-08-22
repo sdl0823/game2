@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>猜數字</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            height: 100vh;
+            margin: 0;
+            padding-top: 20px;
+            background-color: #f0f0f0;
+        }
+        .game-container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        input, button {
+            margin: 10px 5px;
+            padding: 5px;
+        }
+        #history {
+            margin-top: 20px;
+        }
+        #exitButton {
+            background-color: #ff4d4d;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>猜數字</h1>
+    <div id="game-container">
+        <h1>猜數字遊戲</h1>
+        <p>請猜一個四位數字（數字不重複，且首位不為0）</p>
+        <input type="number" id="guess" min="1000" max="9999">
+        <button onclick="checkGuess()" id="guessButton">猜！</button>
+        <button id="exitButton" onclick="exitGame()">離開遊戲</button>
+        <p id="result"></p>
+        <p id="attempts"></p>
+        <p id="timer"></p>
+        <div id="history"></div>        
+    </div>
+	<script>
+        let targetNumber;
+        let attempts = 0;
+        let startTime;
+        let timerInterval;
+        let gameActive = false;
+
+        function generateNumber() {
+            const digits = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+            let result = '';
+            for (let i = 0; i < 4; i++) {
+                const index = Math.floor(Math.random() * digits.length);
+                result += digits[index];
+                digits.splice(index, 1);
+            }
+            return result;
+        }
+
+        function startGame() {
+            targetNumber = generateNumber();
+            attempts = 0;
+            document.getElementById('history').innerHTML = '';
+            document.getElementById('result').innerHTML = '';
+            document.getElementById('attempts').innerHTML = '剩餘次數：10';
+            document.getElementById('guess').value = '';
+            document.getElementById('guessButton').disabled = false;
+            startTime = new Date();
+            timerInterval = setInterval(updateTimer, 1000);
+            gameActive = true;
+        }
+
+        function updateTimer() {
+            const currentTime = new Date();
+            const elapsedTime = Math.floor((currentTime - startTime) / 1000);
+            document.getElementById('timer').innerHTML = `時間：${elapsedTime}秒`;
+        }
+
+        function checkGuess() {
+            if (!gameActive) return;
+
+            const guess = document.getElementById('guess').value;
+            if (guess.length !== 4 || isNaN(guess) || guess[0] === '0' || new Set(guess).size !== 4) {
+                alert('請輸入四位不重複的數字，且首位不為0！');
+                return;
+            }
+
+            attempts++;
+            let a = 0, b = 0;
+
+            for (let i = 0; i < 4; i++) {
+                if (guess[i] === targetNumber[i]) {
+                    a++;
+                } else if (targetNumber.includes(guess[i])) {
+                    b++;
+                }
+            }
+
+            const result = `${guess}: ${a}A${b}B`;
+            document.getElementById('history').innerHTML += result + '<br>';
+            document.getElementById('attempts').innerHTML = `剩餘次數：${10 - attempts}`;
+
+            if (a === 4) {
+                endGame(true);
+            } else if (attempts >= 10) {
+                endGame(false);
+            }
+        }
+
+        function endGame(isWin) {
+            clearInterval(timerInterval);
+            gameActive = false;
+            document.getElementById('guessButton').disabled = true;
+            if (isWin) {
+                document.getElementById('result').innerHTML = '恭喜你猜對了！';
+            } else {
+                document.getElementById('result').innerHTML = `遊戲結束，正確答案是 ${targetNumber}`;
+            }
+            
+            setTimeout(() => {
+                if (confirm('遊戲結束。要再玩一次嗎？')) {
+                    startGame();
+                } else {
+                    exitGame();
+                }
+            }, 100);
+        }
+
+        function exitGame() {
+            if (confirm('確定要離開遊戲嗎？這將關閉網頁。')) {
+                alert('請手動關閉此頁面以離開遊戲。');
+                document.body.innerHTML = '<h1>遊戲已結束，請關閉此頁面。</h1>';
+            }
+        }
+
+        startGame();
+    </script>
+    <a href="index.html" class="back-link">返回首頁</a>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小遊戲合集</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+        h1 {
+            color: #333;
+        }
+        .game-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            padding: 0;
+            list-style-type: none;
+        }
+        .game-grid li {
+            margin: 0;
+        }
+        .game-grid a {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100px;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+            font-size: 16px;
+            text-align: center;
+            padding: 10px;
+        }
+        .game-grid a:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>小遊戲合集</h1>
+    <ul class="game-grid">
+        <li><a href="minesweeper.html">10x10踩地雷</a></li>
+        <li><a href="poker.html">撲克牌比大小</a></li>
+        <li><a href="reversi.html">黑白棋</a></li>
+        <li><a href="snake.html">貪吃蛇</a></li>
+        <li><a href="memory.html">記憶翻牌</a></li>
+        <li><a href="colorblocks.html">彩色方塊消除</a></li>
+        <li><a href="tictactoe.html">井字遊戲</a></li>
+        <li><a href="sudoku.html">數獨</a></li>
+        <li><a href="bounceball.html">彈跳球</a></li>
+		<li><a href="guess_the_numbers.html">猜數字</a></li>
+    </ul>
+</body>
+</html>
